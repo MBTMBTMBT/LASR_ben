@@ -458,6 +458,9 @@ def parse_result_dict(
     Returns:
         dict: _description_
     """
+    for i, command in enumerate(result["commands"]):
+        for key, value in result["command_params"][i].items():
+            result["command_params"][i][key] = value.replace(" ", "_")
 
     for i, command in enumerate(result["commands"]):
         if "object" in result["command_params"][i]:
@@ -475,6 +478,12 @@ def parse_result_dict(
                     "location"
                 ]
                 del result["command_params"][i]["location"]
+
+        # if "destination" in result["command_params"][i]:
+        #     result["command_params"][i]["destination"] = result["command_params"][i][
+        #             "destination"
+        #         ].replace(" ", "_")
+        #     print(result["command_params"][i]["destination"])
 
         # Update command params based on the previous commands params
         if i > 0:
@@ -503,6 +512,7 @@ def parse_result_dict(
                     result["command_params"][i]["object_category"] = result[
                         "command_params"
                     ][i - 1]["object_category"]
+
     return result
 
 
@@ -514,17 +524,137 @@ def reverse_translate_verb_dict(verb: str) -> str:
 
 
 if __name__ == "__main__":
-    object_categories_plural = ["sticks"]
-    object_categories_singular = ["stick"]
+    object_categories_plural = [
+        "dishes",
+        "snacks",
+        "fruits",
+        "decorations",
+        "drinks",
+        "food",
+        "cleaning supplies",
+    ]
+    object_categories_singular = [
+        "dish",
+        "snack",
+        "fruit",
+        "decoration",
+        "drink",
+        "food",
+        "cleaning supply",
+    ]
     object_categories = object_categories_singular + object_categories_plural
     config: Configuration = {
-        "person_names": ["guest1", "guest2"],
-        "location_names": ["sofa", "piano", "kitchen table", "bed"],
-        "placement_location_names": ["kitchen table"],
-        "room_names": ["living room", "kitchen", "bedroom"],
-        "object_names": ["cup", "television"],
-        "object_categories_plural": ["sticks"],
-        "object_categories_singular": ["stick"],
+        "person_names": [
+            "sophie",
+            "julia",
+            "emma",
+            "sara",
+            "laura",
+            "hayley",
+            "susan",
+            "fleur",
+            "gabrielle",
+            "robin",
+            "john",
+            "liam",
+            "lucas",
+            "william",
+            "kevin",
+            "jesse",
+            "noah",
+            "harrie",
+            "peter",
+            "robin",
+        ],
+        "location_names": [
+            "hallway cabinet",
+            "entrance",
+            "desk",
+            "shelf",
+            "coathanger",
+            "exit",
+            "TV table",
+            "lounge chair",
+            "lamp",
+            "couch",
+            "coffee table",
+            "trashcan",
+            "kitchen cabinet",
+            "dinner table",
+            "dishwasher",
+            "kitchen counter",
+        ],
+        "placement_location_names": [
+            "hallway cabinet",
+            "desk",
+            "shelf",
+            "TV table",
+            "coffee table",
+            "kitchen cabinet",
+            "dinner table",
+            "dishwasher",
+            "kitchen counter",
+        ],
+        "room_names": ["living room", "kitchen", "office", "hallway"],
+        "object_names": [
+            "soap",
+            "dishwasher tab",
+            "washcloth",
+            "sponges",
+            "cola",
+            "ice tea",
+            "water",
+            "milk",
+            "big coke",
+            "fanta",
+            "dubblefris",
+            "cornflakes",
+            "pea soup",
+            "curry",
+            "pancake mix",
+            "hagelslag",
+            "sausages",
+            "mayonaise",
+            "candle",
+            "pear",
+            "plum",
+            "peach",
+            "lemon",
+            "orange",
+            "strawberry",
+            "banana",
+            "apple",
+            "stroopwafel",
+            "candy",
+            "liquorice",
+            "crisps",
+            "pringles",
+            "tictac",
+            "spoon",
+            "plate",
+            "cup",
+            "fork",
+            "bowl",
+            "knife",
+        ],
+        "object_categories_plural": [
+            "dishes",
+            "snacks",
+            "fruits",
+            "decorations",
+            "drinks",
+            "food",
+            "cleaning supplies",
+        ],
+        "object_categories_singular": [
+            "dish",
+            "snack",
+            "fruit",
+            "decoration",
+            "drink",
+            "food",
+            "cleaning supply",
+        ],
     }
 
     regex_str = gpsr_regex(config)
@@ -550,7 +680,7 @@ if __name__ == "__main__":
     #         object_categories,
     #     )
     # )
-
+    #
     # print(
     #     execute(
     #         "tell the time to the person raising their right arm in the kitchen",
@@ -563,14 +693,14 @@ if __name__ == "__main__":
     #         object_categories,
     #     )
     # )
-
+    #
     # print(
     #     execute(
     #         "navigate to the kitchen table then find a stick.",
     #         object_categories,
     #     )
     # )
-
+    #
     # print(
     #     execute(
     #         "tell me what is the biggest stick on the kitchen table",
